@@ -44,13 +44,11 @@ public class ProductoRepositoryImpl implements Repository<Producto> {
                         .prepareStatement("SELECT * FROM productos WHERE id = ?")) {
             stmt.setLong(1, id); // indice, valor
 
-            ResultSet res = stmt.executeQuery();
-
-            if(res.next()) {
-                producto = crearProducto(res);
+            try (ResultSet res = stmt.executeQuery()) {
+                if (res.next()) {
+                    producto = crearProducto(res);
+                }
             }
-
-            res.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,11 +60,46 @@ public class ProductoRepositoryImpl implements Repository<Producto> {
     @Override
     public void guardar(Producto producto) {
 
+        String sql;
+
+        // Si hay un registro con ese ID actualizalo
+        if (producto.getId() != null && producto.getId() > 0) {
+            sql = "UPDATE productos SET nombre=?, precio=? WHERE id = ?";
+        } else {
+            // Si no hay registro, inserta uno nuevo
+            sql = "INSERT INTO productos(nombre, precio, fecha_registro) VALUES (?,?,?)";
+        }
+
+        try(
+            PreparedStatement stmt = getConnection().prepareStatement(sql)) {
+
+            // Pasar parámetros
+            stmt.setString(1, producto.getNombre());
+            stmt.setLong(2, producto.getPrecio());
+
+            if (producto.getId() != null && producto.getId() > 0) {
+                stmt.setLong(3, producto.getId());
+            } else {
+                stmt.setDate(3, new Date(producto.getFechaRegistro().getTime()));
+            }
+
+            // Ejecutar sentencia
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public void eliminar(Long id) {
-
+        try(PreparedStatement stmt = getConnection().prepareStatement("DELETE FROM productos WHERE id = ?")) {
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private static Producto crearProducto(ResultSet rs) throws SQLException {
