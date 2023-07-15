@@ -9,6 +9,17 @@ public class Producto {
     private Integer precio;
     private Date fechaRegistro;
 
+    @Override
+    public String toString() {
+        return id +
+                " | " +
+                nombre +
+                " | " +
+                precio +
+                " | " +
+                "fechaRegistro";
+    }
+
     public Producto() {
 
     }

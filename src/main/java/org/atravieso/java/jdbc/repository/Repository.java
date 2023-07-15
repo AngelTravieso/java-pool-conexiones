@@ -6,7 +6,7 @@ public interface Repository<T> {
 
     List<T> listar();
 
-    T porId();
+    T porId(Long id);
 
     // Este lo usaremos para guardar y actualizar
     void guardar(T t);

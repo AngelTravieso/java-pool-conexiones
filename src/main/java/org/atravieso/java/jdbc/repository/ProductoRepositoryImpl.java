@@ -3,10 +3,7 @@ package org.atravieso.java.jdbc.repository;
 import org.atravieso.java.jdbc.models.Producto;
 import org.atravieso.java.jdbc.util.ConexionBD;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +22,7 @@ public class ProductoRepositoryImpl implements Repository<Producto> {
             ResultSet rs = stmt.executeQuery("SELECT * FROM productos")) {
 
             while(rs.next()) {
-                Producto producto = new Producto();
-                producto.setId(rs.getLong("ID"));
-                producto.setNombre(rs.getString("nombre"));
-                producto.setPrecio(rs.getInt("precio"));
-                producto.setFechaRegistro(rs.getDate("fecha_registro"));
+                Producto producto = crearProducto(rs);
 
                 productos.add(producto);
             }
@@ -42,8 +35,28 @@ public class ProductoRepositoryImpl implements Repository<Producto> {
     }
 
     @Override
-    public Producto porId() {
-        return null;
+    public Producto porId(Long id) {
+
+        Producto producto = null;
+
+        try(
+                PreparedStatement stmt = getConnection()
+                        .prepareStatement("SELECT * FROM productos WHERE id = ?")) {
+            stmt.setLong(1, id); // indice, valor
+
+            ResultSet res = stmt.executeQuery();
+
+            if(res.next()) {
+                producto = crearProducto(res);
+            }
+
+            res.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return producto;
     }
 
     @Override
@@ -54,5 +67,14 @@ public class ProductoRepositoryImpl implements Repository<Producto> {
     @Override
     public void eliminar(Long id) {
 
+    }
+
+    private static Producto crearProducto(ResultSet rs) throws SQLException {
+        Producto producto = new Producto();
+        producto.setId(rs.getLong("ID"));
+        producto.setNombre(rs.getString("nombre"));
+        producto.setPrecio(rs.getInt("precio"));
+        producto.setFechaRegistro(rs.getDate("fecha_registro"));
+        return producto;
     }
 }
