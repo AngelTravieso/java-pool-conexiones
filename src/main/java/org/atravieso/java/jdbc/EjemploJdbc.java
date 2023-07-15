@@ -1,25 +1,21 @@
 package org.atravieso.java.jdbc;
 
+import org.atravieso.java.jdbc.util.ConexionBD;
+
 import java.sql.*;
 
 public class EjemploJdbc {
     public static void main(String[] args) {
 
-        // url de conexión (serverTimeZone? opcional)
-        String url = "jdbc:mysql://localhost:3306/java_curso?serverTimeZone=UTC";
-        String username = "root"; // usuario
-        String password = "root"; // password
-
-        // Se ejecuta de forma automática, es un autoClose, sea buena o mala la operación
         try (
-            // Conexión a la BD
-            Connection conn = DriverManager.getConnection(url, username, password);
+                // Conexión a la BD (clase personalizada
+                Connection conn = ConexionBD.getInstance();
 
-            // Statement, devuelve un cursor
-            Statement stmt = conn.createStatement();
+                // Statement, devuelve un cursor
+                Statement stmt = conn.createStatement();
 
-            // Consulta
-            ResultSet result = stmt.executeQuery("SELECT * FROM productos");
+                // Consulta
+                ResultSet result = stmt.executeQuery("SELECT * FROM productos");
             ) {
 
             // Iterar el cursor con un while
