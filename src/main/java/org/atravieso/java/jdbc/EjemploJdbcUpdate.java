@@ -5,10 +5,11 @@ import org.atravieso.java.jdbc.repository.ProductoRepositoryImpl;
 import org.atravieso.java.jdbc.repository.Repository;
 import org.atravieso.java.jdbc.util.ConexionBD;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 
-public class EjemploJdbc {
+public class EjemploJdbcUpdate {
     public static void main(String[] args) {
 
         try (
@@ -21,15 +22,15 @@ public class EjemploJdbc {
             repository.listar().forEach(System.out::println);
 
             System.out.println("=================== OBTENER POR ID ==================");
-            System.out.println(repository.porId(2L));
+            System.out.println(repository.porId(3L));
 
-            System.out.println("================= INSERTAR NUEVO PRODUCTO ===========");
+            System.out.println("================= ACTUALIZAR PRODUCTO ===========");
             Producto producto = new Producto();
-            producto.setNombre("Teclado mecánico");
-            producto.setPrecio(500);
-            producto.setFechaRegistro(new Date());
+            producto.setId(3L);
+            producto.setNombre("Teclado Razer mecánico");
+            producto.setPrecio(700);
             repository.guardar(producto);
-            System.out.println("Producto guardado con éxito");
+            System.out.println("Producto editado con éxito");
             repository.listar().forEach(System.out::println);
 
         } catch(SQLException e) {

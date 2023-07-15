@@ -17,7 +17,7 @@ public class Producto {
                 " | " +
                 precio +
                 " | " +
-                "fechaRegistro";
+                fechaRegistro;
     }
 
     public Producto() {

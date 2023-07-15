@@ -5,10 +5,10 @@ import org.atravieso.java.jdbc.repository.ProductoRepositoryImpl;
 import org.atravieso.java.jdbc.repository.Repository;
 import org.atravieso.java.jdbc.util.ConexionBD;
 
-import java.sql.*;
-import java.util.Date;
+import java.sql.Connection;
+import java.sql.SQLException;
 
-public class EjemploJdbc {
+public class EjemploJdbcDelete {
     public static void main(String[] args) {
 
         try (
@@ -21,15 +21,11 @@ public class EjemploJdbc {
             repository.listar().forEach(System.out::println);
 
             System.out.println("=================== OBTENER POR ID ==================");
-            System.out.println(repository.porId(2L));
+            System.out.println(repository.porId(3L));
 
-            System.out.println("================= INSERTAR NUEVO PRODUCTO ===========");
-            Producto producto = new Producto();
-            producto.setNombre("Teclado mecánico");
-            producto.setPrecio(500);
-            producto.setFechaRegistro(new Date());
-            repository.guardar(producto);
-            System.out.println("Producto guardado con éxito");
+            System.out.println("================= ELIMINAR PRODUCTO ===========");
+            repository.eliminar(3L);
+            System.out.println("Producto eliminado con éxito");
             repository.listar().forEach(System.out::println);
 
         } catch(SQLException e) {
