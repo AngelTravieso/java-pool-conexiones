@@ -11,6 +11,8 @@
       <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/atravieso/java/jdbc/models/Producto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/atravieso/java/jdbc/repository/Repository.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/org/atravieso/java/jdbc/util/ConexionBD.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/atravieso/java/jdbc/EjemploJdbc.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/atravieso/java/jdbc/EjemploJdbc.java" afterDir="false" />
@@ -24,6 +26,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
