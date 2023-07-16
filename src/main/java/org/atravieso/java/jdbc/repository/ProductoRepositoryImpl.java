@@ -1,5 +1,6 @@
 package org.atravieso.java.jdbc.repository;
 
+import org.atravieso.java.jdbc.models.Categoria;
 import org.atravieso.java.jdbc.models.Producto;
 import org.atravieso.java.jdbc.util.ConexionBD;
 
@@ -19,11 +20,10 @@ public class ProductoRepositoryImpl implements Repository<Producto> {
 
         try (
             Statement stmt = getConnection().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM productos")) {
+            ResultSet rs = stmt.executeQuery("SELECT p.*, c.nombre AS categoria FROM productos AS p INNER JOIN categorias AS c ON (p.categoria_id = c.id)")) {
 
             while(rs.next()) {
                 Producto producto = crearProducto(rs);
-
                 productos.add(producto);
             }
 
@@ -41,7 +41,7 @@ public class ProductoRepositoryImpl implements Repository<Producto> {
 
         try(
                 PreparedStatement stmt = getConnection()
-                        .prepareStatement("SELECT * FROM productos WHERE id = ?")) {
+                        .prepareStatement("SELECT p.*, c.nombre AS categoria FROM productos AS p INNER JOIN categorias AS c ON (p.categoria_id = c.id) WHERE p.id = ?")) {
             stmt.setLong(1, id); // indice, valor
 
             try (ResultSet res = stmt.executeQuery()) {
@@ -64,10 +64,10 @@ public class ProductoRepositoryImpl implements Repository<Producto> {
 
         // Si hay un registro con ese ID actualizalo
         if (producto.getId() != null && producto.getId() > 0) {
-            sql = "UPDATE productos SET nombre=?, precio=? WHERE id = ?";
+            sql = "UPDATE productos SET nombre=?, precio=?, categoria_id=? WHERE id = ?";
         } else {
             // Si no hay registro, inserta uno nuevo
-            sql = "INSERT INTO productos(nombre, precio, fecha_registro) VALUES (?,?,?)";
+            sql = "INSERT INTO productos(nombre, precio, categoria_id, fecha_registro) VALUES (?,?,?, ?)";
         }
 
         try(
@@ -76,11 +76,12 @@ public class ProductoRepositoryImpl implements Repository<Producto> {
             // Pasar parámetros
             stmt.setString(1, producto.getNombre());
             stmt.setLong(2, producto.getPrecio());
+            stmt.setLong(3, producto.getCategoria().getId());
 
             if (producto.getId() != null && producto.getId() > 0) {
-                stmt.setLong(3, producto.getId());
+                stmt.setLong(4, producto.getId());
             } else {
-                stmt.setDate(3, new Date(producto.getFechaRegistro().getTime()));
+                stmt.setDate(4, new Date(producto.getFechaRegistro().getTime()));
             }
 
             // Ejecutar sentencia
@@ -104,10 +105,18 @@ public class ProductoRepositoryImpl implements Repository<Producto> {
 
     private static Producto crearProducto(ResultSet rs) throws SQLException {
         Producto producto = new Producto();
+        Categoria categoria = new Categoria();
         producto.setId(rs.getLong("ID"));
         producto.setNombre(rs.getString("nombre"));
         producto.setPrecio(rs.getInt("precio"));
         producto.setFechaRegistro(rs.getDate("fecha_registro"));
+        categoria.setId(rs.getLong("categoria_id"));
+
+        // viene del alias de "listar" c.nombre AS categoria
+        categoria.setNombre(rs.getString("categoria"));
+
+        // relación producto con categoría
+        producto.setCategoria(categoria);
         return producto;
     }
 }

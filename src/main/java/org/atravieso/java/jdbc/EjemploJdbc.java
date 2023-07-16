@@ -1,5 +1,6 @@
 package org.atravieso.java.jdbc;
 
+import org.atravieso.java.jdbc.models.Categoria;
 import org.atravieso.java.jdbc.models.Producto;
 import org.atravieso.java.jdbc.repository.ProductoRepositoryImpl;
 import org.atravieso.java.jdbc.repository.Repository;
@@ -25,12 +26,18 @@ public class EjemploJdbc {
 
             System.out.println("================= INSERTAR NUEVO PRODUCTO ===========");
             Producto producto = new Producto();
-            producto.setNombre("Teclado mecánico");
-            producto.setPrecio(500);
+            producto.setNombre("Keycaps");
+            producto.setPrecio(350);
             producto.setFechaRegistro(new Date());
+
+            Categoria categoria = new Categoria();
+            categoria.setId(3L); // categoría => computación
+            producto.setCategoria(categoria);
+
             repository.guardar(producto);
             System.out.println("Producto guardado con éxito");
             repository.listar().forEach(System.out::println);
+
 
         } catch(SQLException e) {
             e.printStackTrace();
