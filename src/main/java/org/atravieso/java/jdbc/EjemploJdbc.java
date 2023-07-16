@@ -26,8 +26,8 @@ public class EjemploJdbc {
 
             System.out.println("================= INSERTAR NUEVO PRODUCTO ===========");
             Producto producto = new Producto();
-            producto.setNombre("Keycaps");
-            producto.setPrecio(350);
+            producto.setNombre("Balón");
+            producto.setPrecio(112);
             producto.setFechaRegistro(new Date());
 
             Categoria categoria = new Categoria();
@@ -37,7 +37,6 @@ public class EjemploJdbc {
             repository.guardar(producto);
             System.out.println("Producto guardado con éxito");
             repository.listar().forEach(System.out::println);
-
 
         } catch(SQLException e) {
             e.printStackTrace();
